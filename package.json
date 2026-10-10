@@ -1,0 +1,39 @@
+{
+  "name": "digup-windows",
+  "version": "1.0.0",
+  "description": "Describe it. Dig it up. File search by meaning for Windows with Google DeepMind's EmbeddingGemma 2",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "build:renderer": "vite build",
+    "build:main": "tsc -p tsconfig.json && node -e \"const fs = require('fs'); fs.mkdirSync('dist/worker', {recursive: true}); fs.copyFileSync('src/worker/digup_worker.py', 'dist/worker/digup_worker.py');\"",
+    "build": "npm run build:renderer && npm run build:main",
+    "start": "electron .",
+    "test": "node dist/engine/test.js"
+  },
+  "keywords": ["search", "semantic-search", "embeddinggemma-2", "desktop", "windows", "llm"],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "better-sqlite3": "^13.0.3",
+    "chokidar": "^5.0.0",
+    "clsx": "^2.1.1",
+    "ignore": "^7.0.12",
+    "lucide-react": "^1.55.0",
+    "mammoth": "^1.13.0",
+    "pdf-parse": "^2.4.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.6.5",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^44.7.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}
