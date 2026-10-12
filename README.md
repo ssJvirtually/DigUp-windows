@@ -1,93 +1,60 @@
-# DigUp for Windows
+# DigUp for Windows (Native Java Swing + Windows 11 Fluent)
 
-<p align="center"><b>Describe it. Dig it up.</b><br>
-Search the files on your Windows PC by what's in them, with Google DeepMind's
-<a href="https://huggingface.co/google/embeddinggemma-2">EmbeddingGemma 2</a>.</p>
-
-<p align="center"><b>Native Windows Desktop App</b> · Windows 10/11 · Free and open source</p>
-
-EmbeddingGemma 2 is the multimodal embedding model Google DeepMind released in October 2026. It puts text, images, audio, and video into one shared 768-dimensional space: a photo of a dog on a beach lands next to the words "a dog on the beach", and a recording of someone talking about sleep lands next to "where they talk about sleep". It understands more than 100 languages.
-
-**DigUp for Windows** brings this full capability to your Windows PC with 100% functionality parity with the original macOS version.
+A high-performance Windows desktop replica of [DigUp](https://github.com/ARahim3/DigUp), providing local multimodal AI search across screenshots, pictures, PDFs, documents, audio, video, and source code.
 
 ---
 
-## What You Can Find
+## 🌟 Key Features
 
-- **"zebra in a video"** opens the clip at the moment the zebra appears.
-- **"where they talk about sleep"** jumps to that exact minute of a podcast or recording.
-- **"the clause about pets in the lease"** shows the PDF page, with matching words highlighted.
-- **"a dog on the beach"** finds the photo, and **"payment declined error"** finds the screenshot.
-- A search in English can find notes written in Bengali, Arabic, or any of the 100+ supported languages.
-- **"code: retry a failed call with backoff"** finds the function in your code repositories and opens it at the exact line in VS Code, Cursor, Visual Studio, JetBrains IDEs, or Sublime Text.
-
-Exact keywords, invoice numbers, error codes, and names are matched via SQLite FTS5 full-text indexing, fusing meaning and exact strings into a unified hybrid ranking score.
-
----
-
-## Privacy First
-
-- **100% Offline & Private**: Everything indexed stays on your PC. No cloud uploads, no telemetry, no accounts.
-- Goes online only once to download the open-source model weights (865 MB).
-
----
-
-## Keyboard Shortcuts & Using DigUp
-
-| Key | Action |
-|---|---|
-| **Alt+Space** (or **Ctrl+Shift+Space**) | Opens the Spotlight-like floating search panel from any app |
-| **↓ ↑** | Moves through results |
-| **Enter** | Opens result (videos/recordings at timestamp, PDFs at page, code in editor at line) |
-| **Ctrl+Enter** | Reveals file in Windows File Explorer |
-| **Ctrl+C** | Copies file path to clipboard |
-| **Ctrl+O** | Opens the Full Search Window (Gallery grid with kind filters) |
-| **Esc** | Closes search panel |
+1. **Native Windows 11 Look & Feel**:
+   - Built entirely in **Java Swing** powered by [FlatLaf](https://www.formdev.com/flatlaf/) Windows 11 Fluent theme.
+   - Clean dark/light mode with Segoe UI typography, rounded corners, and native window frames.
+2. **Spotlight-Style Search Panel (`Alt + Space`)**:
+   - Floating search bar accessible from anywhere in Windows via global hotkey.
+   - Instant as-you-type keyword matching (FTS5) and debounced semantic query embedding.
+   - Left-side grouped results by kind with category icons (Screenshots, Pictures, PDFs, Documents, Audio, Video, Code).
+   - Rich right-side preview pane:
+     - Scaled image thumbnails with dimensions and EXIF metadata.
+     - Document and code syntax viewer with line numbers and matched lines highlighted.
+     - PDF page excerpts and rendered scans.
+     - Video / audio timestamp seeker.
+3. **Full Gallery Window**:
+   - Filter tabs across all categories with real-time hit counts.
+   - Table and grid list with instant detail drawer.
+4. **100% Mathematical & Architectural Parity with macOS DigUp**:
+   - **Vectors**: 768-dimensional float32/float16 embeddings stored in SQLite WAL mode.
+   - **Modality Z-Score Normalization**: Centering per modality (text, image, audio) and scaling by global standard deviation.
+   - **Hybrid Rank Fusion**: `score = meaningWeight * max(z, 0) + wordsWeight * pow(coverage, 1.5) + kind_boost`.
+   - **AST & Code Symbol Resolver**: Direct definition and identifier matching (`CodeLookup`).
+5. **System Tray Integration**:
+   - Native Windows system tray icon with background indexing status and context menu.
 
 ---
 
-## System Architecture
+## 🚀 How to Launch the GUI App
 
-```
-chosen folders ─► readers (Image, PDF, Audio, Video, Windows OCR, Code Extractor)
-               ─► EmbeddingGemma 2 Worker process (stdio JSON lines, quits on idle)
-               ─► SQLite (WAL mode): 768-d float16 vectors + FTS5 BM25 keyword index
-search query   ─► Query Encoder (on-demand) ─► Z-score normalized cosine similarity + BM25 fusion
-```
+### Option 1: Double-Click the Launcher
+Double-click `run.bat` in this directory.
 
-### Windows Enhancements & Tech Stack
-- **Desktop Shell & UI**: Electron + React + Tailwind CSS with dark glassmorphism and acrylic blur.
-- **Database**: `better-sqlite3` with compiled-in FTS5 and WAL mode.
-- **File Watching**: `chokidar` for instant incremental sync.
-- **Media Previews**: HTML5 Video/Audio players with instant timestamp jumping, PDF page viewer, syntax-highlighted code viewer.
-- **Code Editors**: VS Code, Cursor, Visual Studio, Sublime Text, JetBrains (IntelliJ, PyCharm, WebStorm, CLion, Rider), Notepad++.
-- **System Tray**: Live status menu with pause/resume and quick search.
-
----
-
-## Build and Run
-
-### Prerequisites
-- Node.js (v18+)
-- Python (3.10+)
-
-### Commands
+### Option 2: Command Line
 ```powershell
-# Install dependencies
-npm install
+# Using the pre-built JAR:
+java -jar target\digup-windows-1.0.0.jar
 
-# Build frontend and backend
-npm run build
-
-# Run DigUp
-npm start
-
-# Run verification test suite
-node dist/engine/test.js
+# Or to run in the background without a terminal window:
+start javaw -jar target\digup-windows-1.0.0.jar
 ```
+
+### Global Shortcut
+- Press **`Alt + Space`** anytime to summon or dismiss the search panel!
 
 ---
 
-## License
+## 🛠️ Build from Source
+```powershell
+# Compile and run unit tests:
+mvn test
 
-MIT
+# Package JAR and dependencies:
+mvn package -DskipTests
+```
